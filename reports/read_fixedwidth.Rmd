@@ -1,0 +1,59 @@
+---
+title: "Reading in 1973 to 2014 fixed-width data"
+output: html_notebook
+editor_options: 
+  chunk_output_type: inline
+---
+
+```{r}
+library(tidyverse)
+library(magrittr)
+```
+
+I've been looking at the `status` files and the 1973-2014 batch is fixed width while the 2014-2016 batch is pipe-delimited. The way the variables are coded (and possibly the set of variables) are also different. The problem I've been having is trying to determine the widths for the 1973-2014 variables because I can't quite distinguish the coded variables from each other. 
+
+### Example from 1973-2014
+
+```{r}
+dir = glue::glue(
+  "/Volumes/research_data/opm-federal-employment-data/data/",
+  "1973-09-to-2014-06/non-dod/status/",
+  "Status_Non_DoD_2009_12.txt")
+
+widths = c(9, 12, 8, 2, 11, 5, 6, 5, 16)
+
+df_fwf = read_fwf(dir, fwf_widths(widths), n_max = 5000)
+
+df_fwf
+
+```
+
+I think the first column is an ID, then there's a name column which has been massacred in `X2` to `X4`. The numbers in `X5` are probably the date the data was released or something like that. `X8` is probaby age ranges, and somewhere in `X9` there's also a range for years since degree. The problematic parts are:
+
+- Between `X5` and `X7`, I have no idea what the variables are how many of them there are. Seems like agency is in there somewhere but I don't know what else
+- I can't tell what else is going on in `X9`, although after talking to you it looks like the GS pay scale is in there
+
+### Example from 2014-2016
+
+It might help to have the 2016 data to look at. Since it's pipe-delimited it's much easier.
+
+```{r}
+dir2 = glue::glue("/Volumes/research_data/opm-federal-employment-data/data/", 
+                  "2014-09-to-2016-09/non-dod/status/", "Non_DoD_201609.txt")
+
+df_pipe = read_delim(dir2, 
+           col_names = FALSE,
+           delim = "|",
+           n_max = 5000) 
+
+df_pipe
+
+```
+
+### Data documentation
+
+There's some documentation in the Buzzfeed files that might be helpful too. 
+
+- `opm-federal-employment-data/data/2014-09-to-2016-09/non-dod/documentation/Jeremy Singer-Vine Data Record Format.xls`
+- `opm-federal-employment-data/data/2014-09-to-2016-09/non-dod/translations`
+
