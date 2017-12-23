@@ -20,9 +20,15 @@ dir = glue::glue(
   "1973-09-to-2014-06/non-dod/status/",
   "Status_Non_DoD_2009_12.txt")
 
-widths = c(9, 12, 8, 2, 11, 5, 6, 5, 16)
+widths = c(9, 23, 8, 4, 9, 6, 6, 2, 2, 2, 6, 4, 1, 6, 1, 2, 1, 1)
 
-df_fwf = read_fwf(dir, fwf_widths(widths), n_max = 5000)
+varnames = c("id", "name", "filedate", "agency_subelement", "duty_station", "age_range", "years_since_degree_range", "education", "payplan", "grade", "los", "occupation", "occupational_category", "adjusted_basic_pay", "supervisory_status", "appointment_type", "work_schedule", "nsftp")
+
+df_widths = data_frame(widths = widths, varnames = varnames)
+
+df_widths %<>% filter(varnames != "years_since_degree_range")
+
+df_fwf = read_fwf(dir, fwf_widths(df_widths$widths, df_widths$varnames), n_max = Inf, na = c("", "NA", "*"))
 
 df_fwf
 
@@ -41,9 +47,12 @@ It might help to have the 2016 data to look at. Since it's pipe-delimited it's m
 dir2 = glue::glue("/Volumes/research_data/opm-federal-employment-data/data/", 
                   "2014-09-to-2016-09/non-dod/status/", "Non_DoD_201609.txt")
 
+
+varnames = c("Family Name", "Given Name", "File Date", "Agency", "SubAgency", "State", "Age Range", "YSD (Year Since Degree) Range", "Education Level", "Pay Plan", "Grade", "LOS (Length of Service) Level", "Occupation", "Occupational Category (PATCO)", "Adjusted Basic Pay", "Supervisor", "TOA (Type of Appointment)", "Work Schedule", "NSFTP (Non-Seasonal Full-Time Permanent) Indicator")
+
 df_pipe = read_delim(dir2, 
-           col_names = FALSE,
-           delim = "|",
+           col_names = varnames,
+           delim = "|", na = c("", "NA", "*"), 
            n_max = 5000) 
 
 df_pipe
