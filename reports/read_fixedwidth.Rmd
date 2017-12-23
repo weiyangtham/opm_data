@@ -37,11 +37,6 @@ df_fwf
 
 ```
 
-I think the first column is an ID, then there's a name column which has been massacred in `X2` to `X4`. The numbers in `X5` are probably the date the data was released or something like that. `X8` is probaby age ranges, and somewhere in `X9` there's also a range for years since degree. The problematic parts are:
-
-- Between `X5` and `X7`, I have no idea what the variables are how many of them there are. Seems like agency is in there somewhere but I don't know what else
-- I can't tell what else is going on in `X9`, although after talking to you it looks like the GS pay scale is in there
-
 ### 2014-2016 Data
 
 Variable names are from this file (this is the file path after you unzip the entire dataset): `/opm-federal-employment-data/data/2014-09-to-2016-09/non-dod/documentation/Jeremy Singer-Vine Data Record Format.xls`. 
