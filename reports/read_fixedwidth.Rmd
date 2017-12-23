@@ -10,7 +10,7 @@ library(tidyverse)
 library(magrittr)
 ```
 
-In general, the information needed to read in the different files seems to be available in the `documentation` or `docs` folders, particularly for the later sets of files. And if not they are available in the FOIA response letters, in particular the widths for the first set files starting 1973. 
+In general, the information needed to read in the different files seems to be available in the `documentation` or `docs` folders, particularly for the later sets of files. And if not they are available in the FOIA response letters, in particular the widths for the first set of files starting 1973. I'll go through the documentation and see if I can dig up the remaining info for reading in the other files. 
 
 ### 1973-2014
 
