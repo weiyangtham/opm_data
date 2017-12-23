@@ -10,9 +10,11 @@ library(tidyverse)
 library(magrittr)
 ```
 
-I've been looking at the `status` files and the 1973-2014 batch is fixed width while the 2014-2016 batch is pipe-delimited. The way the variables are coded (and possibly the set of variables) are also different. The problem I've been having is trying to determine the widths for the 1973-2014 variables because I can't quite distinguish the coded variables from each other. 
+In general, the information needed to read in the different files seems to be available in the `documentation` or `docs` folders, particularly for the later sets of files. And if not they are available in the FOIA response letters, in particular the widths for the first set files starting 1973. 
 
-### Example from 1973-2014
+### 1973-2014
+
+These files are fixed-width. Width lengths are specified in [this doc dated 2015-02-11](https://ia600608.us.archive.org/16/items/opm-federal-employment-data/docs/2015-02-11-opm-foia-response.pdf). However, it is also noted at [this link](https://archive.org/details/opm-federal-employment-data) that the "Years Since Degree Range" column is missing, so exclude that when reading in the files. 
 
 ```{r}
 dir = glue::glue(
@@ -28,7 +30,8 @@ df_widths = data_frame(widths = widths, varnames = varnames)
 
 df_widths %<>% filter(varnames != "years_since_degree_range")
 
-df_fwf = read_fwf(dir, fwf_widths(df_widths$widths, df_widths$varnames), n_max = Inf, na = c("", "NA", "*"))
+df_fwf = read_fwf(dir, fwf_widths(df_widths$widths, df_widths$varnames), n_max = 5000, na = c("", "NA", "*"), 
+                  col_types = cols())
 
 df_fwf
 
@@ -39,9 +42,9 @@ I think the first column is an ID, then there's a name column which has been mas
 - Between `X5` and `X7`, I have no idea what the variables are how many of them there are. Seems like agency is in there somewhere but I don't know what else
 - I can't tell what else is going on in `X9`, although after talking to you it looks like the GS pay scale is in there
 
-### Example from 2014-2016
+### 2014-2016 Data
 
-It might help to have the 2016 data to look at. Since it's pipe-delimited it's much easier.
+Variable names are from this file (this is the file path after you unzip the entire dataset): `/opm-federal-employment-data/data/2014-09-to-2016-09/non-dod/documentation/Jeremy Singer-Vine Data Record Format.xls`. 
 
 ```{r}
 dir2 = glue::glue("/Volumes/research_data/opm-federal-employment-data/data/", 
@@ -51,18 +54,11 @@ dir2 = glue::glue("/Volumes/research_data/opm-federal-employment-data/data/",
 varnames = c("Family Name", "Given Name", "File Date", "Agency", "SubAgency", "State", "Age Range", "YSD (Year Since Degree) Range", "Education Level", "Pay Plan", "Grade", "LOS (Length of Service) Level", "Occupation", "Occupational Category (PATCO)", "Adjusted Basic Pay", "Supervisor", "TOA (Type of Appointment)", "Work Schedule", "NSFTP (Non-Seasonal Full-Time Permanent) Indicator")
 
 df_pipe = read_delim(dir2, 
-           col_names = varnames,
+           col_names = varnames, col_types = cols(),
            delim = "|", na = c("", "NA", "*"), 
            n_max = 5000) 
 
 df_pipe
 
 ```
-
-### Data documentation
-
-There's some documentation in the Buzzfeed files that might be helpful too. 
-
-- `opm-federal-employment-data/data/2014-09-to-2016-09/non-dod/documentation/Jeremy Singer-Vine Data Record Format.xls`
-- `opm-federal-employment-data/data/2014-09-to-2016-09/non-dod/translations`
 
