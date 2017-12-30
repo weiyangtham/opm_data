@@ -1,13 +1,15 @@
+---
+title: ""
+output: github_document
+---
 
-Data
-====
+# Data
 
 Federal payroll records obtained from the U.S. Office of Personnel Management by [Buzzfeed](https://www.buzzfeed.com/jsvine/sharing-hundreds-of-millions-of-federal-payroll-records?utm_term=.xr93XYlojJ#.tlqXR12zrO)
 
-There are three sets of data (as of Dec 2017): 1973-09 to 2014-06, 2014-09 to 2016-09, and 2016-12 to 2017-03.
+There are three sets of data (as of Dec 2017): 1973-09 to 2014-06, 2014-09 to 2016-09, and 2016-12 to 2017-03. 
 
-How to read the data
---------------------
+## How to read the data
 
 ### 1973-2014
 
@@ -15,7 +17,8 @@ These are fixed-width files. You need to specify the width of each column to rea
 
 Example code to read in a "status" file from 1973-2014:
 
-``` r
+```{r, eval = FALSE}
+
 library(readr)
 
 widths = c(9, 23, 8, 4, 9, 6, 2, 2, 2, 6, 4, 1, 6, 1, 2, 1, 1)
@@ -27,11 +30,13 @@ dir = paste0(root, "opm-federal-employment-data/data/1973-09-to-2014-06/non-dod/
              "Status_Non_DoD_2009_12.txt")
 
 status = read_fwf(dir, fwf_widths(widths, varnames), na = c("", "NA", "*"))
+
 ```
 
 Example code to read in a "dynamic" file from 1973-2014:
 
-``` r
+```{r, eval = FALSE}
+
 widths = c(9, 23, 4, 2, 8, 6, 2, 2, 6, 9, 4, 1, 6, 2, 1)
 
 varnames = c("id", "name", "agency_subelement", "access_separate", "effective_date", "age", "payplan", "grade", "los", "duty_station", "occupation", "occupational_category", "adjusted_basic_pay", "appointment_type", "work_schedule")
@@ -41,4 +46,6 @@ dir = paste0(root, "opm-federal-employment-data/data/1973-09-to-2014-06/non-dod/
              "JUN1991.NONDOD.FO05M3.TXT")
 
 dyn = read_fwf(dir, fwf_widths(widths, varnames), na = c("", "NA", "*", "**"))
+
 ```
+
